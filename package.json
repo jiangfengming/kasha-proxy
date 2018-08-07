@@ -1,0 +1,22 @@
+{
+  "name": "@kasha-io/proxy",
+  "version": "0.1.0-dev.0",
+  "description": "Kasha proxy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kasha-io/kasha-proxy.git"
+  },
+  "keywords": [
+    "kasha"
+  ],
+  "author": "Jiang Fengming",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kasha-io/kasha-proxy/issues"
+  },
+  "homepage": "https://github.com/kasha-io/kasha-proxy#readme"
+}
