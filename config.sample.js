@@ -1,6 +1,8 @@
 module.exports = {
   port: 3100,
 
+  kashaAddress: 'http://localhost:3000',
+
   sentry: {
     dsn: ''
   },
@@ -13,8 +15,8 @@ module.exports = {
       upstreamHeaders: {
 
       },
-      realFileExtensions: ['html', 'js', 'css', 'jpg', 'jpeg', 'png', 'gif', 'eot', 'ttf', 'woff', 'woff2', 'svg', 'svgz'],
-      virtualPath: [
+      realFileExtensions: ['.html', '.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz'],
+      virtualPathMapping: [
         ['/:project/*', '/$1/index.html'],
         ['*', '/index.html']
       ],

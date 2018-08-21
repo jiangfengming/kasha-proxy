@@ -3,6 +3,10 @@
 (async() => {
   const Koa = require('koa')
   const Router = require('koa-router')
+  const { URL } = require('url')
+  const path = require('path')
+  const URLRouter = require('url-router')
+  const RESTError = require('./RESTError')
   const getSiteConfig = await require('./getSiteConfig')
 
   const app = new Koa()
@@ -19,9 +23,9 @@
       ctx.set('Kasha-Code', 'OK')
     } catch (e) {
       let err = e
-      if (!(e instanceof CustomError)) {
+      if (!(e instanceof RESTError)) {
         const { timestamp, eventId } = logger.error(e)
-        err = new CustomError('SERVER_INTERNAL_ERROR', timestamp, eventId)
+        err = new RESTError('SERVER_INTERNAL_ERROR', timestamp, eventId)
       }
       ctx.set('Kasha-Code', err.code)
       ctx.status = err.status
@@ -34,23 +38,43 @@
   }
 
   function proxy(ctx) {
-    if (['', '1'].includes(ctx.query._no_prerender)) {
+    const url = new URL(ctx.url)
+    const ext = path.extname(url.pathname)
+    const isRealFile = ctx.siteConf.realFileExtensions.includes(ext)
+    const upstream = isRealFile || ['', '1'].includes(ctx.query._no_prerender) ? 'origin' : 'kasha'
+
+    if (upstream === 'origin') {
+      if (!isRealFile) {
+        url.pathname = fileMap(url.pathname, ctx.siteConf.virtualPathMapping)
+      }
+    } else {
 
     }
   }
 
+  function fileMap(pathname, maps) {
+    const router = new URLRouter()
+    for (const [from, to] of maps) {
+      router.get(from, to)
+    }
+
+    const matched = router.find('GET', pathname)
+  }
+
   app.use(async ctx => {
+    logger.debug(`${ctx.method} ${ctx.url}`)
+
     const host = ctx.host
-    if (!host) throw new CustomError('CLIENT_PROXY_INVALID_HOST_HEADER')
+    if (!host) throw new RESTError('CLIENT_PROXY_INVALID_HOST_HEADER')
 
     const siteConf = await getSiteConfig(host)
-    if (!siteConf) throw new CustomError('CLIENT_PROXY_HOST_CONFIG_NOT_EXIST')
+    if (!siteConf) throw new RESTError('CLIENT_PROXY_HOST_CONFIG_NOT_EXIST')
 
     ctx.siteConf = siteConf
   })
 
   router.get('/robots.txt', robotsTxt)
-  router.get('/sitemaps/*', proxy)
+  router.get('*', proxy)
 
 
   // graceful exit
