@@ -1,8 +1,6 @@
 module.exports = {
   port: 3100,
 
-  kashaAddress: 'http://localhost:3000',
-
   sentry: {
     dsn: ''
   },
@@ -11,18 +9,19 @@ module.exports = {
 
   sites: {
     'https://www.example.com:8000': {
-      upstream: 'https://bucket-foo.somecloud.com',
-      upstreamHeaders: {
-
+      origin: 'https://bucket-foo.somecloud.com',
+      originHeaders: {
+        Host: 'www.example.com'
+      },
+      kasha: 'http://localhost:3000',
+      kashaHeaders: {
+        token: 'aaaaaaaa'
       },
       realFileExtensions: ['.html', '.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz'],
       virtualPathMapping: [
         ['/:project/*', '/$1/index.html'],
         ['*', '/index.html']
-      ],
-      kashaHeaders: {
-        token: 'aaaaaaaa'
-      }
+      ]
     }
   },
 

@@ -5,7 +5,9 @@
   const Router = require('koa-router')
   const { URL } = require('url')
   const path = require('path')
+  const http = require('http')
   const URLRouter = require('url-router')
+  const config = require('./config')
   const RESTError = require('./RESTError')
   const getSiteConfig = await require('./getSiteConfig')
 
@@ -37,18 +39,38 @@
 
   }
 
-  function proxy(ctx) {
+  async function proxy(ctx) {
     const url = new URL(ctx.url)
     const ext = path.extname(url.pathname)
     const isRealFile = ctx.siteConf.realFileExtensions.includes(ext)
     const upstream = isRealFile || ['', '1'].includes(ctx.query._no_prerender) ? 'origin' : 'kasha'
 
+    let upstreamURL, headers
     if (upstream === 'origin') {
       if (!isRealFile) {
-        url.pathname = fileMap(url.pathname, ctx.siteConf.virtualPathMapping)
-      }
-    } else {
+        const pathname = fileMap(url.pathname, ctx.siteConf.virtualPathMapping)
+        if (!pathname) throw new RESTError('CLIENT_PROXY_VIRTUAL_PATH_NO_MAPPING',url.pathname)
 
+        url.pathname = pathname
+      }
+
+      upstreamURL = new URL(ctx.siteConf.origin)
+      upstreamURL.pathname = url.pathname
+      upstreamURL.search = url.search
+      headers = ctx.siteConf.originHeaders
+    } else {
+      upstreamURL = new URL(config.siteConf.kasha)
+      upstreamURL.pathname = url.href
+      headers = ctx.siteConf.kashaHeaders
+    }
+
+    try {
+      const { req, res } = await request(upstreamURL, headers)
+      ctx.status = res.statusCode
+      ctx.set(res.headers)
+      ctx.body = res
+    } catch (e) {
+      throw new RESTError('CLIENT_PROXY_FETCHING_ERROR', e.message)
     }
   }
 
@@ -59,6 +81,22 @@
     }
 
     const matched = router.find('GET', pathname)
+    return matched ? matched.handler : null
+  }
+
+  function request(url, headers) {
+    return new Promise((resolve, reject) => {
+      const req = http.request({
+        protocal: url.protocol,
+        hostname: url.hostname,
+        port: url.port,
+        path: url.pathname + url.search,
+        headers: headers
+      }, res => resolve(res))
+
+      req.on('error', e => reject(e))
+      req.end()
+    })
   }
 
   app.use(async ctx => {
