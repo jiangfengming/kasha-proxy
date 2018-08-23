@@ -62,7 +62,7 @@
   }
 
   async function proxy(ctx) {
-    const url = new URL(ctx.host + ctx.url)
+    const url = new URL(ctx.href)
     const ext = path.extname(url.pathname)
     const isRealFile = ctx.siteConf.realFileExtensions.includes(ext)
     const upstream = isRealFile || ['', '1'].includes(ctx.query._no_prerender) ? 'origin' : 'kasha'
@@ -82,7 +82,8 @@
       headers = ctx.siteConf.originHeaders
     } else {
       upstreamURL = new URL(ctx.siteConf.kasha)
-      upstreamURL.pathname = url.href
+      upstreamURL.pathname = '/' + url.origin + url.pathname
+      upstreamURL.search = url.search
       headers = ctx.siteConf.kashaHeaders
     }
 
