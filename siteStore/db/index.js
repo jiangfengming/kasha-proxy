@@ -3,7 +3,13 @@ const db = require('./db')
 
 module.exports = db.connect(url, database, options).then(db => {
   const collection = db.collection('sites')
-  return function(origin) {
-    return collection.findOne({ origin })
+  return {
+    getConfig(origin) {
+      return collection.findOne({ origin })
+    },
+
+    close() {
+      return db.close()
+    }
   }
 })
