@@ -62,14 +62,15 @@
   }
 
   async function proxy(ctx) {
-    const url = new URL(ctx.href)
+    const url = new URL(ctx.siteConf.protocol + ctx.host + ctx.url)
     const ext = path.extname(url.pathname)
-    const isRealFile = ctx.siteConf.realFileExtensions.includes(ext)
-    const upstream = isRealFile || ['', '1'].includes(ctx.query._no_prerender) ? 'origin' : 'kasha'
+    const isHTML = ['.html', '.htm'].includes(ext)
+    const isAsset = isHTML ? false : ctx.siteConf.assetExtensions.includes(ext)
+    const upstream = isAsset || ['', '1'].includes(ctx.query._no_prerender) ? 'origin' : 'kasha'
 
     let upstreamURL, headers
     if (upstream === 'origin') {
-      if (!isRealFile) {
+      if (!isHTML && !isAsset) {
         const pathname = fileMap(url.pathname, ctx.siteConf.virtualPathMapping)
         if (!pathname) throw new RESTError('CLIENT_PROXY_VIRTUAL_PATH_NO_MAPPING', url.pathname)
 
@@ -90,6 +91,7 @@
     try {
       const res = await request(upstreamURL, headers)
       ctx.status = res.statusCode
+      delete res.headers.connection
       ctx.set(res.headers)
       ctx.body = res
     } catch (e) {
@@ -110,7 +112,7 @@
   function request(url, headers) {
     return new Promise((resolve, reject) => {
       const req = http.request({
-        protocal: url.protocol,
+        protocol: url.protocol,
         hostname: url.hostname,
         port: url.port,
         path: url.pathname + url.search,

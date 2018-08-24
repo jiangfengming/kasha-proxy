@@ -9,15 +9,20 @@ module.exports = {
 
   sites: {
     'www.example.com': {
+      protocol: 'https:',
+
       origin: 'https://bucket-foo.somecloud.com',
       originHeaders: {
         Host: 'www.example.com'
       },
+
       kasha: 'http://localhost:3000',
       kashaHeaders: {
         token: 'aaaaaaaa'
       },
-      realFileExtensions: ['.html', '.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz'],
+
+      assetExtensions: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.ico', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz'],
+
       virtualPathMapping: [
         ['/:project/*', '/$1/index.html'],
         ['*', '/index.html']
@@ -25,9 +30,12 @@ module.exports = {
     },
 
     'localhost:3100': {
+      protocol: 'http:',
       origin: 'http://localhost:8080',
       kasha: 'http://localhost:3000',
-      realFileExtensions: ['.html', '.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz'],
+
+      assetExtensions: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.ico', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz'],
+
       virtualPathMapping: [
         ['*', '/index.html']
       ]
