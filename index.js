@@ -48,25 +48,18 @@
   })
 
   app.use(async(ctx, next) => {
-    if (ctx.path === '/robots.txt') {
-      await robotsTxt(ctx)
-    } else {
-      await proxy(ctx)
-    }
-
+    await proxy(ctx)
     return next()
   })
-
-  function robotsTxt(ctx) {
-
-  }
 
   async function proxy(ctx) {
     const url = new URL(ctx.siteConf.protocol + ctx.host + ctx.url)
     const ext = path.extname(url.pathname)
     const isHTML = ['.html', '.htm'].includes(ext)
     const isAsset = isHTML ? false : ctx.siteConf.assetExtensions.includes(ext)
-    const upstream = isAsset || ['', '1'].includes(ctx.query._no_prerender) ? 'origin' : 'kasha'
+    const noPrerender = ['', '1'].includes(ctx.query._no_prerender)
+    const isRobotsTxt = url.pathname === '/robots.txt' && !noPrerender
+    const upstream = !isRobotsTxt && (isAsset || noPrerender) ? 'origin' : 'kasha'
 
     let upstreamURL, headers
     if (upstream === 'origin') {

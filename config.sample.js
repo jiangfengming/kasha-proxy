@@ -21,7 +21,7 @@ module.exports = {
         token: 'aaaaaaaa'
       },
 
-      assetExtensions: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.ico', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz'],
+      assetExtensions: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.ico', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz', '.txt'],
 
       virtualPathMapping: [
         ['/:project/*', '/$1/index.html'],
@@ -34,7 +34,7 @@ module.exports = {
       origin: 'http://localhost:8080',
       kasha: 'http://localhost:3000',
 
-      assetExtensions: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.ico', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz'],
+      assetExtensions: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.ico', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz', '.txt'],
 
       virtualPathMapping: [
         ['*', '/index.html']
