@@ -1,7 +1,7 @@
 const { sitesStore: { url, database, options } } = require('../../config')
-const db = require('./db')
+const mongo = require('./mongo')
 
-module.exports = db.connect(url, database, options).then(db => {
+module.exports = mongo.connect(url, database, options).then(db => {
   const collection = db.collection('sites')
   return {
     getConfig(host) {
@@ -9,7 +9,7 @@ module.exports = db.connect(url, database, options).then(db => {
     },
 
     close() {
-      return db.close()
+      return mongo.close()
     }
   }
 })
