@@ -1,12 +1,6 @@
 module.exports = {
   port: 3100,
 
-  sentry: {
-    dsn: ''
-  },
-
-  loglevel: 'debug', // debug, info, warning, error, fatal
-
   sites: [
     {
       host: 'www.example.com',
@@ -45,11 +39,19 @@ module.exports = {
   ],
 
   // store sites in mongodb instead of using 'sites' config
+  /*
   sitesStore: {
     url: 'mongodb://localhost:27017',
     database: 'kasha-proxy',
     options: {
       poolSize: 10
     }
-  }
+  },
+  */
+
+  sentry: {
+    dsn: ''
+  },
+
+  loglevel: 'debug' // debug, info, warning, error, fatal
 }
