@@ -7,8 +7,9 @@ module.exports = {
 
   loglevel: 'debug', // debug, info, warning, error, fatal
 
-  sites: {
-    'www.example.com': {
+  sites: [
+    {
+      host: 'www.example.com',
       protocol: 'https:',
 
       origin: 'https://bucket-foo.somecloud.com',
@@ -29,7 +30,8 @@ module.exports = {
       ]
     },
 
-    'localhost:3100': {
+    {
+      host: 'localhost:3100',
       protocol: 'http:',
       origin: 'http://localhost:8080',
       kasha: 'http://localhost:3000',
@@ -40,16 +42,14 @@ module.exports = {
         ['*', '/index.html']
       ]
     }
-  }
+  ],
 
   // store sites in mongodb instead of using 'sites' config
-  /*
   sitesStore: {
     url: 'mongodb://localhost:27017',
-    database: 'kasha',
+    database: 'kasha-proxy',
     options: {
       poolSize: 10
     }
   }
-  */
 }

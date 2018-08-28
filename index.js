@@ -28,7 +28,7 @@
         const { timestamp, eventId } = logger.error(e)
         err = new RESTError('SERVER_PROXY_INTERNAL_ERROR', timestamp, eventId)
       }
-      ctx.status = err.status
+      ctx.status = err.httpStatus
       ctx.body = err.toJSON()
     }
   })

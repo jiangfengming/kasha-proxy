@@ -5,7 +5,7 @@ module.exports = {
   },
 
   CLIENT_PROXY_HOST_CONFIG_NOT_EXIST: {
-    message: 'Host config not existed.',
+    message: 'Host config does not exist.',
     httpStatus: 400
   },
 

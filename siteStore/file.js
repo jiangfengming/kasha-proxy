@@ -1,7 +1,7 @@
 const { sites } = require('../config')
 
-function getConfig(origin) {
-  return sites[origin]
+function getConfig(host) {
+  return sites.find(config => config.host === host)
 }
 
 function close() {

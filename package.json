@@ -3,6 +3,9 @@
   "version": "0.1.0-dev.0",
   "description": "Kasha proxy",
   "main": "index.js",
+  "bin": {
+    "kasha-proxy": "./index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
