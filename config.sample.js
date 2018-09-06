@@ -16,6 +16,8 @@ module.exports = {
         token: 'aaaaaaaa'
       },
 
+      removeQueryString: true,
+
       assetExtensions: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.ico', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz', '.txt'],
 
       virtualPathMapping: [
@@ -29,6 +31,8 @@ module.exports = {
       protocol: 'http:',
       origin: 'http://localhost:8080',
       kasha: 'http://localhost:3000',
+
+      removeQueryString: true,
 
       assetExtensions: ['.js', '.css', '.jpg', '.jpeg', '.png', '.gif', '.ico', '.eot', '.ttf', '.woff', '.woff2', '.svg', '.svgz', '.txt'],
 

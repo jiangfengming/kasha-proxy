@@ -72,13 +72,15 @@
 
       upstreamURL = new URL(ctx.siteConf.origin)
       upstreamURL.pathname = url.pathname
-      upstreamURL.search = url.search
       headers = ctx.siteConf.originHeaders
     } else {
       upstreamURL = new URL(ctx.siteConf.kasha)
       upstreamURL.pathname = '/' + url.origin + url.pathname
-      upstreamURL.search = url.search
       headers = ctx.siteConf.kashaHeaders
+    }
+
+    if (!ctx.siteConf.removeQueryString) {
+      upstreamURL.search = url.search
     }
 
     try {
