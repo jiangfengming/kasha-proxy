@@ -20,7 +20,7 @@ module.exports = {
   },
 
   SERVER_PROXY_FETCHING_ERROR: {
-    message: 'Error occurred while fetching from the origin server (%s).',
+    message: 'Error occurred while fetching from the %s server (%s).',
     httpStatus: 500
   },
 

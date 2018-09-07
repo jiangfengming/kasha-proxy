@@ -3,6 +3,7 @@
   const { URL } = require('url')
   const path = require('path')
   const http = require('http')
+  const https = require('https')
   const URLRouter = require('url-router')
   const config = require('./config')
   const logger = require('./logger')
@@ -89,7 +90,7 @@
       ctx.set(res.headers)
       ctx.body = res
     } catch (e) {
-      throw new RESTError('SERVER_PROXY_FETCHING_ERROR', e.message)
+      throw new RESTError('SERVER_PROXY_FETCHING_ERROR', upstream, e.message)
     }
   }
 
@@ -105,8 +106,8 @@
 
   function request(url, headers) {
     return new Promise((resolve, reject) => {
-      const req = http.request({
-        protocol: url.protocol,
+      const _http = url.protocol === 'http' ? http : https
+      const req = _http.request({
         hostname: url.hostname,
         port: url.port,
         path: url.pathname + url.search,
