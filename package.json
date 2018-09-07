@@ -4,7 +4,7 @@
   "description": "Kasha proxy",
   "main": "index.js",
   "bin": {
-    "kasha-proxy": "./index.js"
+    "kasha-proxy": "bin/kasha-proxy"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 (async() => {
   const Koa = require('koa')
   const { URL } = require('url')
@@ -86,6 +84,7 @@
     try {
       const res = await request(upstreamURL, headers)
       ctx.status = res.statusCode
+      delete res.headers['content-disposition']
       delete res.headers.connection
       ctx.set(res.headers)
       ctx.body = res
